@@ -10,7 +10,13 @@
 $VERBOSE = true
 
 require 'io/console'
-
+def termwidth
+	if !IO or !IO.console or !IO.console.winsize
+		return 80 # default
+	else
+		return IO.console.winsize[1]
+	end
+end
 
 ## Derived from https://possiblywrong.wordpress.com/2017/09/30/digits-of-pi-and-python-generators/
 class Continued_Fraction_Spigot
@@ -85,7 +91,7 @@ class Pi_Spigot < Continued_Fraction_Spigot
 end
 
 linecount = ARGV.length > 0 ? ARGV[0].to_i : 3
-perline = ARGV.length > 1 ? ARGV[1].to_i : IO.console.winsize[1]
+perline = ARGV.length > 1 ? ARGV[1].to_i : termwidth
 #puts "#{linecount} lines of #{perline} digits"
 if linecount <= 0 or perline <= 0
 	puts "BUT PI MUST BE NONZERO!"
